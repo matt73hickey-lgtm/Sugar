@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sugar — codebase infographic</title>
+  <meta name="description" content="Visual map of the Sugar repository: six CSV files, five balance-sheet flows, and the 2018/19–2023/24 world sugar story." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0c100e;
+      --card: #17201b;
+      --card-2: #1d2822;
+      --line: rgba(224, 195, 106, 0.16);
+      --gold: #e0c36a;
+      --cream: #f4ecd8;
+      --muted: #9aa392;
+      --prod: #8fce72;
+      --cons: #7eb8d4;
+      --export: #3fc1b0;
+      --import: #e07a5f;
+      --stocks: #e0c36a;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      background:
+        radial-gradient(1100px 480px at 8% -8%, rgba(224,195,106,0.14), transparent 55%),
+        radial-gradient(900px 400px at 100% 0%, rgba(63,193,176,0.08), transparent 50%),
+        var(--bg);
+      color: var(--cream);
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+    }
+    body { line-height: 1.45; }
+    .page { width: min(1180px, calc(100% - 28px)); margin: 0 auto; padding: 32px 0 72px; }
+    .eyebrow { margin: 0 0 8px; letter-spacing: 0.2em; text-transform: uppercase; font-size: 11px; color: var(--gold); }
+    h1, h2, .kpi-value, .poster-stat { font-family: "Fraunces", Georgia, serif; font-weight: 550; }
+    h1 { margin: 0; font-size: clamp(48px, 8vw, 84px); letter-spacing: -0.04em; line-height: 0.9; }
+    h2 { margin: 0 0 6px; font-size: 26px; letter-spacing: -0.03em; }
+    .lede { margin: 12px 0 0; max-width: 46rem; color: #cfc6ae; font-size: 17px; }
+    .hero { display: grid; grid-template-columns: 1.4fr 0.8fr; gap: 28px; align-items: end; margin-bottom: 28px; }
+    .hero-aside {
+      border: 1px solid var(--line); background: var(--card); border-radius: 22px; padding: 18px 20px;
+    }
+    .hero-aside strong { display: block; font-size: 28px; font-family: "Fraunces", Georgia, serif; color: var(--gold); }
+    .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 16px; }
+    .kpi {
+      background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 16px 16px 14px;
+    }
+    .kpi-label { margin: 0; color: var(--muted); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+    .kpi-value { margin: 6px 0 0; font-size: 30px; }
+    .kpi-note { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+    .grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 14px; margin-bottom: 14px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 20px 22px 18px;
+    }
+    .muted { color: var(--muted); margin: 0 0 14px; }
+    .files { display: grid; gap: 8px; }
+    .file {
+      display: grid; grid-template-columns: 18px 1fr auto; gap: 10px; align-items: center;
+      background: var(--card-2); border-radius: 14px; padding: 10px 12px;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .file code { font-size: 13px; color: var(--cream); }
+    .count { color: var(--gold); font-size: 12px; }
+    .identity {
+      display: flex; flex-direction: column; gap: 8px; font-size: 14px; margin: 10px 0 4px;
+    }
+    .eq-line {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    }
+    .chip {
+      border-radius: 999px; padding: 6px 12px; font-weight: 600; background: var(--card-2);
+    }
+    .spark { overflow: visible; }
+    .hbar { display: grid; grid-template-columns: 118px 1fr 54px; gap: 8px; align-items: center; margin: 8px 0; }
+    .hbar-name { font-size: 13px; }
+    .hbar-track { height: 10px; background: #24312a; border-radius: 99px; overflow: hidden; }
+    .hbar-fill { display: block; height: 100%; border-radius: 99px; }
+    .hbar-val { text-align: right; font-size: 13px; color: var(--gold); }
+    .spark { width: 100%; height: auto; display: block; }
+    .chart-axis { fill: #9aa392; font-size: 11px; font-family: "IBM Plex Sans", sans-serif; }
+    .chart-num { fill: #f4ecd8; font-size: 11px; font-family: "IBM Plex Sans", sans-serif; }
+    .legend { display: flex; gap: 16px; margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+    .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; }
+    .story {
+      display: grid; grid-template-columns: 88px 1fr; gap: 14px; padding: 12px 0; border-top: 1px solid var(--line);
+    }
+    .story:first-of-type { border-top: 0; padding-top: 0; }
+    .story-year { color: var(--gold); font-weight: 600; }
+    .coverage-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    .cov {
+      background: var(--card-2); border-radius: 16px; padding: 12px; text-align: center;
+    }
+    .cov strong { display: block; font-size: 28px; font-family: "Fraunces", Georgia, serif; color: var(--gold); }
+    .footer {
+      margin-top: 8px; color: var(--muted); font-size: 13px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    @media (max-width: 900px) {
+      .hero, .grid, .grid-3, .grid-2, .kpis, .coverage-grid { grid-template-columns: 1fr; }
+      .hbar { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #0c100e; }
+      .page { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Repository infographic</p>
+        <h1>Sugar</h1>
+        <p class="lede">
+          This repo is a country-level sugar balance sheet: production, consumption,
+          trade, and ending stocks for marketing years 2018/19–2023/24 (May estimate).
+          Values are thousand metric tons. The infographic is generated from the CSVs.
+        </p>
+      </div>
+      <aside class="hero-aside">
+        <span class="eyebrow">Headline</span>
+        <strong>-37%</strong>
+        <p class="muted" style="margin:6px 0 0">
+          World ending stocks fell from 52.8 Mt in 2018/19 to 33.5 Mt
+          in 2023/24. Stock-to-use dropped from 30.7% to 18.6%.
+        </p>
+      </aside>
+    </header>
+
+    <section class="kpis" aria-label="World totals 2023/24">
+      <article class="kpi">
+        <p class="kpi-label">Production</p>
+        <p class="kpi-value" style="color:var(--prod)">187.9</p>
+        <p class="kpi-note">Mt · 2023/24 May</p>
+      </article>
+      <article class="kpi">
+        <p class="kpi-label">Consumption</p>
+        <p class="kpi-value" style="color:var(--cons)">180.0</p>
+        <p class="kpi-note">Mt · +8.1 vs 2018/19</p>
+      </article>
+      <article class="kpi">
+        <p class="kpi-label">Surplus</p>
+        <p class="kpi-value">7.8</p>
+        <p class="kpi-note">Production minus use</p>
+      </article>
+      <article class="kpi">
+        <p class="kpi-label">Exports</p>
+        <p class="kpi-value" style="color:var(--export)">72.1</p>
+        <p class="kpi-note">Brazil 45% of world</p>
+      </article>
+      <article class="kpi">
+        <p class="kpi-label">Ending stocks</p>
+        <p class="kpi-value" style="color:var(--stocks)">33.5</p>
+        <p class="kpi-note">18.6% stock-to-use</p>
+      </article>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>The cupboard is emptying</h2>
+        <p class="muted">World ending stocks, million tonnes. Drawdown is the main tightness signal in this dataset.</p>
+        
+    <svg class="spark" viewBox="0 0 640 176" role="img" aria-label="Ending stocks falling from 52.8 to 33.5 million tonnes">
+      <polygon points="34.0,146.0 34.0,26.0 148.4,37.8 262.8,31.9 377.2,38.4 491.6,56.4 606.0,70.0 606.0,146.0" fill="rgba(224,195,106,0.16)" />
+      <polyline points="34.0,26.0 148.4,37.8 262.8,31.9 377.2,38.4 491.6,56.4 606.0,70.0" fill="none" stroke="#e0c36a" stroke-width="3" />
+      <circle cx="34.0" cy="26.0" r="5.5" fill="#e0c36a" /><text x="34.0" y="14.0" text-anchor="start" class="chart-num">52.8</text><circle cx="148.4" cy="37.8" r="5.5" fill="#e0c36a" /><text x="148.4" y="25.8" text-anchor="middle" class="chart-num">47.7</text><circle cx="262.8" cy="31.9" r="5.5" fill="#e0c36a" /><text x="262.8" y="19.9" text-anchor="middle" class="chart-num">50.2</text><circle cx="377.2" cy="38.4" r="5.5" fill="#e0c36a" /><text x="377.2" y="26.4" text-anchor="middle" class="chart-num">47.4</text><circle cx="491.6" cy="56.4" r="5.5" fill="#e0c36a" /><text x="491.6" y="44.4" text-anchor="middle" class="chart-num">39.5</text><circle cx="606.0" cy="70.0" r="5.5" fill="#e0c36a" /><text x="606.0" y="58.0" text-anchor="end" class="chart-num">33.5</text>
+      <text x="34.0" y="168" text-anchor="middle" class="chart-axis">18/19</text><text x="148.4" y="168" text-anchor="middle" class="chart-axis">19/20</text><text x="262.8" y="168" text-anchor="middle" class="chart-axis">20/21</text><text x="377.2" y="168" text-anchor="middle" class="chart-axis">21/22</text><text x="491.6" y="168" text-anchor="middle" class="chart-axis">22/23</text><text x="606.0" y="168" text-anchor="middle" class="chart-axis">23/24</text>
+    </svg>
+      </article>
+      <article class="card">
+        <h2>How the files fit</h2>
+        <p class="muted">Six CSVs, one balance sheet. Combined is long-form; the five action files are ranked slices of the same facts.</p>
+        <div class="files">
+          <div class="file"><span class="dot" style="background:#e0c36a"></span><code>combined_df.csv</code><span class="count">135 rows · Name, Action, years</span></div>
+          <div class="file"><span class="dot" style="background:var(--prod)"></span><code>production_df.csv</code><span class="count">27 rows · growers</span></div>
+          <div class="file"><span class="dot" style="background:var(--cons)"></span><code>consumption_df.csv</code><span class="count">27 rows · users</span></div>
+          <div class="file"><span class="dot" style="background:var(--export)"></span><code>export_df.csv</code><span class="count">27 rows · shippers</span></div>
+          <div class="file"><span class="dot" style="background:var(--import)"></span><code>import_df.csv</code><span class="count">27 rows · buyers</span></div>
+          <div class="file"><span class="dot" style="background:#cfc6ae"></span><code>ending_df.csv</code><span class="count">27 rows · inventories</span></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Production vs consumption</h2>
+        <p class="muted">2019/20 was the only deficit year. 2023/24 production rebounded to a six-year high while stocks kept falling.</p>
+        
+    <svg class="spark" viewBox="0 0 540 210" role="img" aria-label="World production versus consumption">
+      <rect x="24" y="23.3" width="28" height="150.7" rx="4" fill="#8fce72" /><rect x="56" y="29.4" width="28" height="144.6" rx="4" fill="#7eb8d4" /><rect x="108" y="33.9" width="28" height="140.1" rx="4" fill="#8fce72" /><rect x="140" y="30.0" width="28" height="144.0" rx="4" fill="#7eb8d4" /><rect x="192" y="22.5" width="28" height="151.5" rx="4" fill="#8fce72" /><rect x="224" y="29.8" width="28" height="144.2" rx="4" fill="#7eb8d4" /><rect x="276" y="22.1" width="28" height="151.9" rx="4" fill="#8fce72" /><rect x="308" y="28.0" width="28" height="146.0" rx="4" fill="#7eb8d4" /><rect x="360" y="24.9" width="28" height="149.1" rx="4" fill="#8fce72" /><rect x="392" y="26.0" width="28" height="148.0" rx="4" fill="#7eb8d4" /><rect x="444" y="16.0" width="28" height="158.0" rx="4" fill="#8fce72" /><rect x="476" y="22.6" width="28" height="151.4" rx="4" fill="#7eb8d4" />
+      <text x="54" y="200" text-anchor="middle" class="chart-axis">2018/19</text><text x="138" y="200" text-anchor="middle" class="chart-axis">2019/20</text><text x="222" y="200" text-anchor="middle" class="chart-axis">2020/21</text><text x="306" y="200" text-anchor="middle" class="chart-axis">2021/22</text><text x="390" y="200" text-anchor="middle" class="chart-axis">2022/23</text><text x="474" y="200" text-anchor="middle" class="chart-axis">2023/24</text>
+    </svg>
+        <p class="legend">
+          <span><i class="swatch" style="background:var(--prod)"></i>Production</span>
+          <span><i class="swatch" style="background:var(--cons)"></i>Consumption</span>
+        </p>
+      </article>
+      <article class="card">
+        <h2>Balance identity</h2>
+        <p class="muted">Each named market is a sparse row in a five-flow ledger. World totals do not fully reconcile because export and import coverage differ.</p>
+        <div class="identity">
+          <div class="eq-line">
+            <span class="chip" style="color:var(--prod)">Production</span>
+            <span>+</span>
+            <span class="chip" style="color:var(--import)">Imports</span>
+          </div>
+          <div class="eq-line">
+            <span>≈</span>
+            <span class="chip" style="color:var(--cons)">Consumption</span>
+            <span>+</span>
+            <span class="chip" style="color:var(--export)">Exports</span>
+            <span>+</span>
+            <span class="chip" style="color:var(--stocks)">Δ stocks</span>
+          </div>
+        </div>
+        <div class="story">
+          <div class="story-year">47</div>
+          <div>Named countries or blocs, plus an <code>Other</code> residual and a <code>Total</code> world row.</div>
+        </div>
+        <div class="story">
+          <div class="story-year">4</div>
+          <div>Markets with every flow reported: China, European Union, India, Indonesia.</div>
+        </div>
+        <div class="story">
+          <div class="story-year">13.1</div>
+          <div>Mt gap between world exports (72.1) and imports (59.0) in 2023/24 — a statistical residual, not a physical surplus.</div>
+        </div>
+      </article>
+    </section>
+
+    <section class="grid-3">
+      <article class="card">
+        <h2>Growers</h2>
+        <p class="muted">Top production, 2023/24 Mt. Brazil is 22% of the world crop.</p>
+        
+            <div class="hbar">
+              <span class="hbar-name">Brazil</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:100%;background:#8fce72"></span></span>
+              <span class="hbar-val">42.0</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">India</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:86%;background:#8fce72"></span></span>
+              <span class="hbar-val">36.0</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">European Union</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:37%;background:#8fce72"></span></span>
+              <span class="hbar-val">15.5</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">Thailand</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:27%;background:#8fce72"></span></span>
+              <span class="hbar-val">11.2</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">China</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:24%;background:#8fce72"></span></span>
+              <span class="hbar-val">10.0</span>
+            </div>
+      </article>
+      <article class="card">
+        <h2>Users</h2>
+        <p class="muted">Top consumption. India is 17% of world use and still drawing stocks.</p>
+        
+            <div class="hbar">
+              <span class="hbar-name">India</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:100%;background:#7eb8d4"></span></span>
+              <span class="hbar-val">31.0</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">European Union</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:55%;background:#7eb8d4"></span></span>
+              <span class="hbar-val">17.0</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">China</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:50%;background:#7eb8d4"></span></span>
+              <span class="hbar-val">15.6</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">United States</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:37%;background:#7eb8d4"></span></span>
+              <span class="hbar-val">11.5</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">Brazil</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:31%;background:#7eb8d4"></span></span>
+              <span class="hbar-val">9.5</span>
+            </div>
+      </article>
+      <article class="card">
+        <h2>Shippers</h2>
+        <p class="muted">Top exports. Thailand is the second engine after Brazil.</p>
+        
+            <div class="hbar">
+              <span class="hbar-name">Brazil</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:100%;background:#3fc1b0"></span></span>
+              <span class="hbar-val">32.4</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">Thailand</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:37%;background:#3fc1b0"></span></span>
+              <span class="hbar-val">12.0</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">India</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:22%;background:#3fc1b0"></span></span>
+              <span class="hbar-val">7.0</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">Australia</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:11%;background:#3fc1b0"></span></span>
+              <span class="hbar-val">3.6</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">Guatemala</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:8%;background:#3fc1b0"></span></span>
+              <span class="hbar-val">1.7</span>
+            </div>
+      </article>
+    </section>
+
+    <section class="grid-2">
+      <article class="card">
+        <h2>Buyers</h2>
+        <p class="muted">Top imports, 2023/24 Mt. Indonesia and China lead the deficit markets.</p>
+        
+            <div class="hbar">
+              <span class="hbar-name">Indonesia</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:100%;background:#e07a5f"></span></span>
+              <span class="hbar-val">5.6</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">China</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:89%;background:#e07a5f"></span></span>
+              <span class="hbar-val">5.0</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">United States</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:53%;background:#e07a5f"></span></span>
+              <span class="hbar-val">3.0</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">Bangladesh</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:48%;background:#e07a5f"></span></span>
+              <span class="hbar-val">2.7</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">European Union</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:44%;background:#e07a5f"></span></span>
+              <span class="hbar-val">2.5</span>
+            </div>
+      </article>
+      <article class="card">
+        <h2>Inventories</h2>
+        <p class="muted">Largest ending stocks. India and Thailand both ran down warehouses over the sample.</p>
+        
+            <div class="hbar">
+              <span class="hbar-name">India</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:100%;background:#e0c36a"></span></span>
+              <span class="hbar-val">5.5</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">Pakistan</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:64%;background:#e0c36a"></span></span>
+              <span class="hbar-val">3.5</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">Indonesia</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:40%;background:#e0c36a"></span></span>
+              <span class="hbar-val">2.2</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">Thailand</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:39%;background:#e0c36a"></span></span>
+              <span class="hbar-val">2.1</span>
+            </div>
+            <div class="hbar">
+              <span class="hbar-name">China</span>
+              <span class="hbar-track"><span class="hbar-fill" style="width:34%;background:#e0c36a"></span></span>
+              <span class="hbar-val">1.9</span>
+            </div>
+      </article>
+    </section>
+
+    <section class="card" style="margin-bottom:14px">
+      <h2>Coverage is sparse on purpose</h2>
+      <p class="muted">
+        Not every country appears in every file. Each action slice keeps the top reporters plus Other and Total.
+        Single-flow specialists include Argentina, Chile, Costa Rica, Ecuador, Eswatini, Iraq, Kazakhstan, Mauritius, Nicaragua, Peru, Somalia, United Kingdom, Yemen, Zimbabwe.
+      </p>
+      <div class="coverage-grid">
+        <div class="cov"><strong>4</strong>all 5 flows</div>
+        <div class="cov"><strong>13</strong>4 flows</div>
+        <div class="cov"><strong>7</strong>3 flows</div>
+        <div class="cov"><strong>9</strong>2 flows</div>
+        <div class="cov"><strong>14</strong>1 flow only</div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>Generated from combined_df.csv · 47 markets · 6 marketing years · thousand metric tons shown here as Mt</span>
+      <span>Rebuild: <code>python3 scripts/build_infographic.py</code></span>
+    </footer>
+  </main>
+  <script type="application/json" id="infographic-data">{"years": ["2018/19", "2019/20", "2020/21", "2021/22", "2022/23", "2023/24"], "production": [179158, 166559, 180114, 180583, 177279, 187881], "consumption": [171994, 171252, 171498, 173661, 176007, 180045], "ending": [52827, 47652, 50239, 47372, 39465, 33455]}</script>
+</body>
+</html>
