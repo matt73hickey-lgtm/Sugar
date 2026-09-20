@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>World Sugar Balance</title>
+    <meta
+      name="description"
+      content="Interactive visualisation of world sugar production, consumption, trade, and ending stocks, 2018/19 to 2023/24."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <p class="eyebrow">Commodity balance sheet</p>
+        <div class="hero-row">
+          <div>
+            <h1>World sugar</h1>
+            <p class="lede" id="source-note">
+              Production, use, trade, and stocks by country.
+            </p>
+          </div>
+          <div class="hero-aside">
+            <p class="aside-label">Marketing year</p>
+            <div class="year-pills" id="year-pills" role="tablist" aria-label="Marketing year"></div>
+          </div>
+        </div>
+      </header>
+
+      <section class="kpis" id="kpis" aria-label="World totals"></section>
+
+      <section class="grid-main">
+        <article class="card chart-card">
+          <div class="card-head">
+            <div>
+              <h2>Global balance</h2>
+              <p>Production and consumption on the left axis; ending stocks on the right.</p>
+            </div>
+          </div>
+          <div class="chart-wrap tall">
+            <canvas id="balance-chart" aria-label="World production, consumption, and ending stocks"></canvas>
+          </div>
+        </article>
+
+        <article class="card insight-card">
+          <h2>What the numbers say</h2>
+          <div id="insights" class="insights"></div>
+        </article>
+      </section>
+
+      <section class="grid-split">
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h2>Ranked countries</h2>
+              <p id="rank-caption">Largest producers in the selected year.</p>
+            </div>
+            <div class="metric-tabs" id="metric-tabs" role="tablist" aria-label="Balance metric"></div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="rank-chart" aria-label="Country ranking for the selected metric"></canvas>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h2>Net trade</h2>
+              <p>Exports minus imports in the selected year. Positive values are net exporters.</p>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="trade-chart" aria-label="Net sugar trade by country"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid-split">
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h2>Stock drawdown</h2>
+              <p>Change in ending stocks from 2018/19 to 2023/24. The buffer has thinned in the largest holders.</p>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="stocks-chart" aria-label="Ending stock changes by country"></canvas>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <div>
+              <h2>Country profile</h2>
+              <p>Select a producer, consumer, or trader to inspect the full local balance.</p>
+            </div>
+            <label class="country-label">
+              <span>Country</span>
+              <select id="country-select"></select>
+            </label>
+          </div>
+          <dl class="profile-kpis" id="profile-kpis"></dl>
+          <div class="chart-wrap">
+            <canvas id="country-chart" aria-label="Selected country sugar balance over time"></canvas>
+          </div>
+        </article>
+      </section>
+
+      <footer class="foot">
+        <p>
+          Figures in thousand metric tons. 2023/24 is the May estimate from the source files.
+          Open this dashboard with <code>python3 -m http.server</code> or by opening
+          <code>index.html</code> directly.
+        </p>
+      </footer>
+    </div>
+
+    <script src="assets/chart.umd.min.js"></script>
+    <script src="assets/data.js"></script>
+    <script src="assets/dashboard.js"></script>
+  </body>
+</html>
