@@ -68,11 +68,15 @@
     .file code { font-size: 13px; color: var(--cream); }
     .count { color: var(--gold); font-size: 12px; }
     .identity {
-      display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 15px; margin-top: 8px;
+      display: flex; flex-direction: column; gap: 8px; font-size: 14px; margin: 10px 0 4px;
+    }
+    .eq-line {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
     }
     .chip {
       border-radius: 999px; padding: 6px 12px; font-weight: 600; background: var(--card-2);
     }
+    .spark { overflow: visible; }
     .hbar { display: grid; grid-template-columns: 118px 1fr 54px; gap: 8px; align-items: center; margin: 8px 0; }
     .hbar-name { font-size: 13px; }
     .hbar-track { height: 10px; background: #24312a; border-radius: 99px; overflow: hidden; }
@@ -161,11 +165,11 @@
         <h2>The cupboard is emptying</h2>
         <p class="muted">World ending stocks, million tonnes. Drawdown is the main tightness signal in this dataset.</p>
         
-    <svg class="spark" viewBox="0 0 640 168" role="img" aria-label="Ending stocks falling from 52.8 to 33.5 million tonnes">
-      <polygon points="8.0,140.0 8.0,18.0 132.8,30.0 257.6,24.0 382.4,30.6 507.2,48.9 632.0,62.7 632.0,140.0" fill="rgba(224,195,106,0.16)" />
-      <polyline points="8.0,18.0 132.8,30.0 257.6,24.0 382.4,30.6 507.2,48.9 632.0,62.7" fill="none" stroke="#e0c36a" stroke-width="3" />
-      <circle cx="8.0" cy="18.0" r="5.5" fill="#e0c36a" /><text x="8.0" y="8.0" text-anchor="middle" class="chart-num">52.8</text><circle cx="132.8" cy="30.0" r="5.5" fill="#e0c36a" /><text x="132.8" y="20.0" text-anchor="middle" class="chart-num">47.7</text><circle cx="257.6" cy="24.0" r="5.5" fill="#e0c36a" /><text x="257.6" y="14.0" text-anchor="middle" class="chart-num">50.2</text><circle cx="382.4" cy="30.6" r="5.5" fill="#e0c36a" /><text x="382.4" y="20.6" text-anchor="middle" class="chart-num">47.4</text><circle cx="507.2" cy="48.9" r="5.5" fill="#e0c36a" /><text x="507.2" y="38.9" text-anchor="middle" class="chart-num">39.5</text><circle cx="632.0" cy="62.7" r="5.5" fill="#e0c36a" /><text x="632.0" y="52.7" text-anchor="middle" class="chart-num">33.5</text>
-      <text x="8.0" y="162" text-anchor="middle" class="chart-axis">2018/19</text><text x="132.8" y="162" text-anchor="middle" class="chart-axis">2019/20</text><text x="257.6" y="162" text-anchor="middle" class="chart-axis">2020/21</text><text x="382.4" y="162" text-anchor="middle" class="chart-axis">2021/22</text><text x="507.2" y="162" text-anchor="middle" class="chart-axis">2022/23</text><text x="632.0" y="162" text-anchor="middle" class="chart-axis">2023/24</text>
+    <svg class="spark" viewBox="0 0 640 176" role="img" aria-label="Ending stocks falling from 52.8 to 33.5 million tonnes">
+      <polygon points="34.0,146.0 34.0,26.0 148.4,37.8 262.8,31.9 377.2,38.4 491.6,56.4 606.0,70.0 606.0,146.0" fill="rgba(224,195,106,0.16)" />
+      <polyline points="34.0,26.0 148.4,37.8 262.8,31.9 377.2,38.4 491.6,56.4 606.0,70.0" fill="none" stroke="#e0c36a" stroke-width="3" />
+      <circle cx="34.0" cy="26.0" r="5.5" fill="#e0c36a" /><text x="34.0" y="14.0" text-anchor="start" class="chart-num">52.8</text><circle cx="148.4" cy="37.8" r="5.5" fill="#e0c36a" /><text x="148.4" y="25.8" text-anchor="middle" class="chart-num">47.7</text><circle cx="262.8" cy="31.9" r="5.5" fill="#e0c36a" /><text x="262.8" y="19.9" text-anchor="middle" class="chart-num">50.2</text><circle cx="377.2" cy="38.4" r="5.5" fill="#e0c36a" /><text x="377.2" y="26.4" text-anchor="middle" class="chart-num">47.4</text><circle cx="491.6" cy="56.4" r="5.5" fill="#e0c36a" /><text x="491.6" y="44.4" text-anchor="middle" class="chart-num">39.5</text><circle cx="606.0" cy="70.0" r="5.5" fill="#e0c36a" /><text x="606.0" y="58.0" text-anchor="end" class="chart-num">33.5</text>
+      <text x="34.0" y="168" text-anchor="middle" class="chart-axis">18/19</text><text x="148.4" y="168" text-anchor="middle" class="chart-axis">19/20</text><text x="262.8" y="168" text-anchor="middle" class="chart-axis">20/21</text><text x="377.2" y="168" text-anchor="middle" class="chart-axis">21/22</text><text x="491.6" y="168" text-anchor="middle" class="chart-axis">22/23</text><text x="606.0" y="168" text-anchor="middle" class="chart-axis">23/24</text>
     </svg>
       </article>
       <article class="card">
@@ -200,15 +204,19 @@
         <h2>Balance identity</h2>
         <p class="muted">Each named market is a sparse row in a five-flow ledger. World totals do not fully reconcile because export and import coverage differ.</p>
         <div class="identity">
-          <span class="chip" style="color:var(--prod)">Production</span>
-          <span>+</span>
-          <span class="chip" style="color:var(--import)">Imports</span>
-          <span>≈</span>
-          <span class="chip" style="color:var(--cons)">Consumption</span>
-          <span>+</span>
-          <span class="chip" style="color:var(--export)">Exports</span>
-          <span>+</span>
-          <span class="chip" style="color:var(--stocks)">Δ stocks</span>
+          <div class="eq-line">
+            <span class="chip" style="color:var(--prod)">Production</span>
+            <span>+</span>
+            <span class="chip" style="color:var(--import)">Imports</span>
+          </div>
+          <div class="eq-line">
+            <span>≈</span>
+            <span class="chip" style="color:var(--cons)">Consumption</span>
+            <span>+</span>
+            <span class="chip" style="color:var(--export)">Exports</span>
+            <span>+</span>
+            <span class="chip" style="color:var(--stocks)">Δ stocks</span>
+          </div>
         </div>
         <div class="story">
           <div class="story-year">47</div>

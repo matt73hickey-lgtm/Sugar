@@ -14,6 +14,7 @@ OUTPUT = ROOT / "infographic.html"
 
 YEARS = ["2018/19", "2019/20", "2020/21", "2021/22", "2022/23", "May2023/24"]
 YEAR_LABELS = ["2018/19", "2019/20", "2020/21", "2021/22", "2022/23", "2023/24"]
+YEAR_SHORT = ["18/19", "19/20", "20/21", "21/22", "22/23", "23/24"]
 ACTIONS = ("production", "consumption", "export", "import", "ending")
 ACTION_FILES = {
     "production": "production_df.csv",
@@ -99,8 +100,8 @@ def bar_rows(items: list[tuple[str, int]], color: str) -> str:
 def stock_chart(ending: dict[str, int]) -> str:
     values = [ending[year] for year in YEARS]
     maximum = max(values)
-    width, height = 640, 168
-    pad_l, pad_r, pad_t, pad_b = 8, 8, 18, 28
+    width, height = 640, 176
+    pad_l, pad_r, pad_t, pad_b = 34, 34, 26, 30
     inner_w = width - pad_l - pad_r
     inner_h = height - pad_t - pad_b
     step = inner_w / (len(values) - 1)
@@ -108,23 +109,25 @@ def stock_chart(ending: dict[str, int]) -> str:
     for i, value in enumerate(values):
         x = pad_l + i * step
         y = pad_t + inner_h * (1 - value / maximum)
-        points.append((x, y, value))
-    polyline = " ".join(f"{x:.1f},{y:.1f}" for x, y, _ in points)
+        points.append((x, y, value, i))
+    polyline = " ".join(f"{x:.1f},{y:.1f}" for x, y, _, _ in points)
     area = f"{pad_l:.1f},{pad_t + inner_h:.1f} " + polyline + f" {pad_l + inner_w:.1f},{pad_t + inner_h:.1f}"
-    circles = "".join(
-        f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5.5" fill="#e0c36a" />'
-        f'<text x="{x:.1f}" y="{y - 10:.1f}" text-anchor="middle" class="chart-num">{fmt_mt(value)}</text>'
-        for x, y, value in points
-    )
+    circles = []
+    for x, y, value, i in points:
+        anchor = "start" if i == 0 else "end" if i == len(points) - 1 else "middle"
+        circles.append(
+            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5.5" fill="#e0c36a" />'
+            f'<text x="{x:.1f}" y="{y - 12:.1f}" text-anchor="{anchor}" class="chart-num">{fmt_mt(value)}</text>'
+        )
     labels = "".join(
-        f'<text x="{x:.1f}" y="{height - 6}" text-anchor="middle" class="chart-axis">{label}</text>'
-        for (x, _, _), label in zip(points, YEAR_LABELS)
+        f'<text x="{x:.1f}" y="{height - 8}" text-anchor="middle" class="chart-axis">{label}</text>'
+        for (x, _, _, _), label in zip(points, YEAR_SHORT)
     )
     return f"""
     <svg class="spark" viewBox="0 0 {width} {height}" role="img" aria-label="Ending stocks falling from 52.8 to 33.5 million tonnes">
       <polygon points="{area}" fill="rgba(224,195,106,0.16)" />
       <polyline points="{polyline}" fill="none" stroke="#e0c36a" stroke-width="3" />
-      {circles}
+      {''.join(circles)}
       {labels}
     </svg>"""
 
@@ -274,11 +277,15 @@ def build_html(rows: list[dict[str, str]]) -> str:
     .file code {{ font-size: 13px; color: var(--cream); }}
     .count {{ color: var(--gold); font-size: 12px; }}
     .identity {{
-      display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 15px; margin-top: 8px;
+      display: flex; flex-direction: column; gap: 8px; font-size: 14px; margin: 10px 0 4px;
+    }}
+    .eq-line {{
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
     }}
     .chip {{
       border-radius: 999px; padding: 6px 12px; font-weight: 600; background: var(--card-2);
     }}
+    .spark {{ overflow: visible; }}
     .hbar {{ display: grid; grid-template-columns: 118px 1fr 54px; gap: 8px; align-items: center; margin: 8px 0; }}
     .hbar-name {{ font-size: 13px; }}
     .hbar-track {{ height: 10px; background: #24312a; border-radius: 99px; overflow: hidden; }}
@@ -396,15 +403,19 @@ def build_html(rows: list[dict[str, str]]) -> str:
         <h2>Balance identity</h2>
         <p class="muted">Each named market is a sparse row in a five-flow ledger. World totals do not fully reconcile because export and import coverage differ.</p>
         <div class="identity">
-          <span class="chip" style="color:var(--prod)">Production</span>
-          <span>+</span>
-          <span class="chip" style="color:var(--import)">Imports</span>
-          <span>≈</span>
-          <span class="chip" style="color:var(--cons)">Consumption</span>
-          <span>+</span>
-          <span class="chip" style="color:var(--export)">Exports</span>
-          <span>+</span>
-          <span class="chip" style="color:var(--stocks)">Δ stocks</span>
+          <div class="eq-line">
+            <span class="chip" style="color:var(--prod)">Production</span>
+            <span>+</span>
+            <span class="chip" style="color:var(--import)">Imports</span>
+          </div>
+          <div class="eq-line">
+            <span>≈</span>
+            <span class="chip" style="color:var(--cons)">Consumption</span>
+            <span>+</span>
+            <span class="chip" style="color:var(--export)">Exports</span>
+            <span>+</span>
+            <span class="chip" style="color:var(--stocks)">Δ stocks</span>
+          </div>
         </div>
         <div class="story">
           <div class="story-year">47</div>
