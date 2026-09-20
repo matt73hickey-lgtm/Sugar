@@ -18,6 +18,8 @@ class DashboardFileTests(unittest.TestCase):
             "assets/chart.umd.min.js",
             "assets/data.js",
             "assets/dashboard.js",
+            "assets/favicon.svg",
+            "Country ranking",
             "balance-chart",
             "rank-chart",
             "trade-chart",

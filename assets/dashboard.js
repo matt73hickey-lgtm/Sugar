@@ -197,10 +197,15 @@
     const kpi = selectedTotals();
     const brazil = DATA.series.Brazil.export[state.yearIndex] || 0;
     const top = rankingFor("production", state.yearIndex, 1)[0];
+    const baseline = DATA.kpis[0];
+    const tightness =
+      state.yearIndex === 0
+        ? `Stock-to-use is ${(kpi.stockToUse * 100).toFixed(1)}% in ${kpi.label}, the start of this series.`
+        : `Stock-to-use is ${(kpi.stockToUse * 100).toFixed(1)}% in ${kpi.label}, versus ${(baseline.stockToUse * 100).toFixed(1)}% in 2018/19.`;
     const items = [
       {
         title: "Market tightness",
-        body: `Stock-to-use is ${(kpi.stockToUse * 100).toFixed(1)}% in ${kpi.label}, versus ${((DATA.kpis[0].stockToUse) * 100).toFixed(1)}% in 2018/19.`,
+        body: tightness,
       },
       {
         title: "Supply vs use",
